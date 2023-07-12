@@ -23,7 +23,7 @@ java -jar .\target\Diagram_Challenge-0.0.1-SNAPSHOT.jar <start_node_id> <end_nod
 ```
 
 ### Example of usage
-Below an example of usage of the network
+Below an example of usage the application
 
 ```
 java -jar .\target\Diagram_Challenge-0.0.1-SNAPSHOT.jar approveInvoice invoiceProcessed
