@@ -8,3 +8,24 @@ Java program does the following:
 * It prints out the IDs of all nodes on the found path.
 
 The code is not finding the shortest path, but a possible path that does not contain loops
+
+## Get started
+
+Starting from the root folder of the project
+
+1. compile the project
+```sh
+mvnw clean package
+```
+2. execute the application with:
+```sh
+java -jar .\target\Diagram_Challenge-0.0.1-SNAPSHOT.jar <start_node_id> <end_node_id>
+```
+
+### Example of usage
+Below an example of usage
+
+```
+java -jar .\target\Diagram_Challenge-0.0.1-SNAPSHOT.jar approveInvoice invoiceProcessed
+```
+
