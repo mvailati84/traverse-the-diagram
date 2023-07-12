@@ -28,15 +28,15 @@ public class MainRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        log.info("Start diagram path analyzer ...");
+        log.info("Start diagram path analyzer with args [{}]", String.join(",", args));
 
         existsInCaseOfInvalidArguments(args);
 
         BpmnModelInstance modelInstance = fetcher.fetchRemotely(BPMN_MODEL_URL);
         log.info("Bpmn model retrieved with success");
 
-        String startNodeId = args[1];
-        String endNodeId = args[2];
+        String startNodeId = args[0];
+        String endNodeId = args[1];
 
         try {
             List<String> path = pathFinder.findPathBetween(modelInstance, startNodeId, endNodeId);
@@ -54,7 +54,7 @@ public class MainRunner implements CommandLineRunner {
     }
 
     private void existsInCaseOfInvalidArguments(String[] args) {
-        if (args.length != 3) {
+        if (args.length != 2) {
             log.error("Invalid number of arguments. Please specify a start node id and an end node id");
             applicationShutdown.shutdown(-1);
         }
