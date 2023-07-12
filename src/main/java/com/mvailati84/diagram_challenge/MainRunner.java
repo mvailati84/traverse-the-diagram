@@ -1,5 +1,6 @@
 package com.mvailati84.diagram_challenge;
 
+import com.mvailati84.diagram_challenge.service.ApplicationShutdown;
 import com.mvailati84.diagram_challenge.service.BpmnDiagramPathFinder;
 import com.mvailati84.diagram_challenge.service.BpmnFetcher;
 import com.mvailati84.diagram_challenge.service.NodeNotFoundException;
@@ -15,15 +16,14 @@ import java.util.List;
 public class MainRunner implements CommandLineRunner {
 
     public static final String BPMN_MODEL_URL = "https://n35ro2ic4d.execute-api.eu-central-1.amazonaws.com/prod/engine-rest/process-definition/key/invoice/xml";
-    final
-    BpmnFetcher fetcher;
+    final BpmnFetcher fetcher;
+    final BpmnDiagramPathFinder pathFinder;
+    final ApplicationShutdown applicationShutdown;
 
-    final
-    BpmnDiagramPathFinder pathFinder;
-
-    public MainRunner(BpmnFetcher fetcher, BpmnDiagramPathFinder pathFinder) {
+    public MainRunner(BpmnFetcher fetcher, BpmnDiagramPathFinder pathFinder, ApplicationShutdown applicationShoutdown) {
         this.fetcher = fetcher;
         this.pathFinder = pathFinder;
+        this.applicationShutdown = applicationShoutdown;
     }
 
     @Override
@@ -41,22 +41,22 @@ public class MainRunner implements CommandLineRunner {
         try {
             List<String> path = pathFinder.findPathBetween(modelInstance, startNodeId, endNodeId);
 
-            if (path.isEmpty()){
+            if (path.isEmpty()) {
                 log.info("No path found between nodes");
-                System.exit(-1);
+                applicationShutdown.shutdown(-1);
             }
 
             System.out.println("The path from " + startNodeId + " to " + endNodeId + " is: [" + String.join(", ", path) + "]");
-        }catch (NodeNotFoundException e){
+        } catch (NodeNotFoundException e) {
             log.error("Error retrieving path between nodes", e);
-            System.exit(-1);
+            applicationShutdown.shutdown(-1);
         }
     }
 
-    private static void existsInCaseOfInvalidArguments(String[] args) {
-        if (args.length != 3){
+    private void existsInCaseOfInvalidArguments(String[] args) {
+        if (args.length != 3) {
             log.error("Invalid number of arguments. Please specify a start node id and an end node id");
-            System.exit(-1);
+            applicationShutdown.shutdown(-1);
         }
     }
 }
