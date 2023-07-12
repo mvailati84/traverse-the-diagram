@@ -1,16 +1,14 @@
 package com.mvailati84.diagram_challenge.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
+import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 public class BpmnDiagramPathFinder {
 
     public List<String> findPathBetween(BpmnModelInstance modelInstance, String startNodeId, String endNodeId) throws NodeNotFoundException {
@@ -63,8 +61,8 @@ public class BpmnDiagramPathFinder {
     private List<FlowNode> getAllOutgoing(FlowNode node) {
         return node.getOutgoing()
                 .stream()
-                .map(sequenceFlow -> sequenceFlow.getTarget())
-                .collect(Collectors.toList());
+                .map(SequenceFlow::getTarget)
+                .toList();
     }
 
     private static FlowNode findNodeById(BpmnModelInstance modelInstance, String nodeId) throws NodeNotFoundException {
